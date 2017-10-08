@@ -1,0 +1,19 @@
+{
+  "name": "rotjs-dungeongen",
+  "version": "0.1.0",
+  "description": "",
+  "contributors": [
+    {
+      "name": "Tom Ford",
+      "email": "flend@compsoc.net"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flend/rotjs-dungeongen"
+  },
+  "main": "dungeongen.js",
+  "dependencies": {
+    "rot-js": "^0.6.4"
+  }
+}
