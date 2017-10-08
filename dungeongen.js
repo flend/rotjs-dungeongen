@@ -1,6 +1,5 @@
 var rj = require("rot-js")
-
-var w = 40, h = 40;
+var fs = require('fs');
 
 function buildMap(width, height) {
 
@@ -55,36 +54,49 @@ function drawMap(mapStore, width, height) {
 
 }
 
-function drawMap(mapStore, width, height) {
+function saveMapCSV(mapStore, filepath, width, height) {
 
-  var row = "";
-
-  for(var x = 0; x < width; x++) {
-    row = row.concat("-");
-  }
-  console.log(row);
-
-  row = "";
+  var csvText = "";
   
   for(var x = 0; x < width; x++) {
     for(var y = 0; y < height; y++) {
       if(mapStore[width * y + x] == 1) {
-	row = row.concat("#");
+	csvText = csvText.concat("1,");
       }
       else {
-	row = row.concat(" ");
+	csvText = csvText.concat("0,");
       }
     }
-    console.log(row);
-    row = "";
+    csvText = csvText.slice(0, -1);
+    csvText = csvText.concat("\n");
   }
+  csvText = csvText.slice(0, -1);
+  
+  fs.writeFile(filepath, csvText, function(err) {
+    if(err) {
+      return console.log(err);
+    }
 
-  for(var x = 0; x < width; x++) {
-    row = row.concat("-");
-  }
-  console.log(row);
-
+    console.log(filepath + " was saved!");
+  });
 }
 
-mapStore = buildMap(w, h);
-drawMap(mapStore, w, h);
+//main
+
+var args = process.argv.slice(2);
+
+if(args.length < 4) {
+  console.log("Usage: node dungeongen.js <width> <height> <numberOfMaps> <pathToSaveFiles>");
+  return;
+}
+
+var w = args[0], h = args[1];
+var noFiles = args[2];
+var path = args[3];
+
+for(var f = 0; f < noFiles; f++) {
+  mapStore = buildMap(w, h);
+  drawMap(mapStore, w, h);
+  var filepath = path + "/" + "map" + f.toString() + ".csv";
+  saveMapCSV(mapStore, filepath, w, h);
+}
